@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+      {
+        "type": "Microsoft.Compute/galleries",
+        "apiVersion": "2020-06-01",
+        "name": "AVD_Images",
+        "location": "westeurope",
+        "properties": {
+          "description": "Your gallery description"
+        }
+      }
+    ]
+  }

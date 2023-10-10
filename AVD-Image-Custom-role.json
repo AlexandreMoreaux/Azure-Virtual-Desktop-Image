@@ -1,0 +1,20 @@
+{
+    "Name": "AVD Custom Image Role",
+    "IsCustom": true,
+    "Description": "This Custom role is used to create custom image template for AVD trough the GUI in AVD Portal",
+    "Actions": [
+      "Microsoft.Compute/galleries/read",
+      "Microsoft.Compute/galleries/images/read",
+      "Microsoft.Compute/galleries/images/versions/read",
+      "Microsoft.Compute/galleries/images/versions/write",
+      "Microsoft.Compute/images/write",
+      "Microsoft.Compute/images/read",
+      "Microsoft.Compute/images/delete",
+      "Microsoft.Network/virtualNetworks/read",
+      "Microsoft.Network/virtualNetworks/subnets/join/action"
+    ],
+    "AssignableScopes": [
+      "/subscriptions/{subscriptionId}"
+    ]
+  }
+  
