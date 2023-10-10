@@ -1,5 +1,5 @@
 #Azure Subscription Name
-$AzureSubscriptionName = "MSDN FR 2"
+$AzureSubscriptionName = ""
 $ResourceLocation = "westeurope"
 $NameoftheAvdImageCustomRole = "Azure Virtual Desktop Image Custom Role3"
 $UserManagedIdName = "My_AVD_Images_ID"
@@ -7,9 +7,9 @@ $AVDImageResourceGroup = "My_AVD_Images"
 $AvdAzureComputeGalleryName = "My_AVD_Azure_Compute_Gallery"
 
 #Github repository where the script will be download
-$AvdImageCustomRolegithubRawUrl = "https://raw.githubusercontent.com/Aldebarancloud/WVDCourse/main/AVD-Image-Custom-role.json"
-$AvdImageUserManagedIdentitygithubRawUrl = "https://raw.githubusercontent.com/Aldebarancloud/WVDCourse/main/AVD-Image-User-Managed-identity.json"
-$AvdAzureComputeGalleryRawUrl = ""
+$AvdImageCustomRolegithubRawUrl = "https://github.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/blob/main/AVD-Image-Custom-role.json"
+$AvdImageUserManagedIdentitygithubRawUrl = "https://github.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/blob/main/AVD-Image-User-Managed-identity.json"
+$AvdAzureComputeGalleryRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Azure-Compute-Gallery.json"
 
 # Download the JSON file from GitHub and save it locally
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
