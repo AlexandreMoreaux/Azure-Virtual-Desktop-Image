@@ -11,12 +11,16 @@ $AvdAzureComputeGalleryName = "My_AVD_Azure_Compute_Gallery"
 ########################################################
 # Github repository where the script will be download #
 ########################################################
-$AvdImageCustomRolegithubRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Image-Custom-role.json"
-$AvdImageUserManagedIdentitygithubRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Image-User-Managed-identity.json"
-$AvdAzureComputeGalleryRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Azure-Compute-Gallery.json"
+$AvdImageCustomRolegithubRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Image-Custom-role-Template.json"
+$AvdImageUserManagedIdentityTemplategithubRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Image-User-Managed-identity-Template.json"
+$AvdImageUserManagedIdentityParametersgithubRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Image-User-Managed-identity-Parameters.json"
+$AvdAzureComputeGalleryTemplateRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Azure-Compute-Gallery-Template.json"
+$AvdAzureComputeGalleryParamettersRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Azure-Compute-Gallery-Parameters.json"
 $AvdImageCustomRoleOutputFile = "C:\AvdImage\AVD-Image-Custom-role.json"
-$AvdImageUserManagedIdentityOutputFile = "C:\AvdImage\AVD-Image-User-Managed-identity.json"
-$AvdAzureComputeGalleryOutputFile = "C:\AvdImage\AVD-Azure-Compute-Gallery.json"
+$AvdImageUserManagedIdentityTemplateOutputFile = "C:\AvdImage\AVD-Image-User-Managed-identity-Template.json"
+$AvdImageUserManagedIdentityParametersOutputFile = "C:\AvdImage\AVD-Image-User-Managed-identity-Parameters.json"
+$AvdAzureComputeGalleryTemplateOutputFile = "C:\AvdImage\AVD-Azure-Compute-Gallery-Template.json"
+$AvdAzureComputeGalleryParametersOutputFile = "C:\AvdImage\AVD-Azure-Compute-Gallery-Parameters.json"
 
 ##########################
 # Create Temp Directory #
@@ -35,8 +39,10 @@ if (-not (Test-Path $folderPath)) {
 ###########################################################
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
 Invoke-WebRequest -Uri $AvdImageCustomRolegithubRawUrl -OutFile $AvdImageCustomRoleOutputFile
-Invoke-WebRequest -Uri $AvdImageUserManagedIdentitygithubRawUrl -OutFile $AvdImageUserManagedIdentityOutputFile
-Invoke-WebRequest -Uri $AvdAzureComputeGalleryRawUrl -OutFile $AvdAzureComputeGalleryOutputFile
+Invoke-WebRequest -Uri $AvdImageUserManagedIdentityTemplategithubRawUrl -OutFile $AvdImageUserManagedIdentityTemplateOutputFile
+Invoke-WebRequest -Uri $AvdImageUserManagedIdentityParametersgithubRawUrl -OutFile $AvdImageUserManagedIdentityParametersOutputFile
+Invoke-WebRequest -Uri $AvdAzureComputeGalleryTemplateRawUrl -OutFile $AvdAzureComputeGalleryTemplateOutputFile
+Invoke-WebRequest -Uri $AvdAzureComputeGalleryParamettersRawUrl -OutFile $AvdAzureComputeGalleryParametersOutputFile
 
 ##################################
 # Connect to Azure and Azure AD #
@@ -70,13 +76,15 @@ $jsonContent.AssignableScopes = $jsonContent.AssignableScopes -replace "{subscri
 $jsonContent.Name = $NameoftheAvdImageCustomRole
 $jsonContent | ConvertTo-Json | Set-Content -Path $AvdImageCustomRoleOutputFile
 
-$jsonContent2 = Get-Content -Path $AvdImageUserManagedIdentityOutputFile | ConvertFrom-Json
+$jsonContent2 = Get-Content -Path $AvdImageUserManagedIdentityParametersgithubRawUrl | ConvertFrom-Json
 $jsonContent2.resources[0].name = $UserManagedIdName
 $jsonContent2.resources[0].location = $ResourceLocation
+$jsonContent2 | ConvertTo-Json | Set-Content -Path $AvdImageUserManagedIdentityParametersgithubRawUrl
 
-$jsonContent3 = Get-Content -Path $AvdAzureComputeGalleryOutputFile | ConvertFrom-Json
+$jsonContent3 = Get-Content -Path $AvdAzureComputeGalleryParamettersRawUrl | ConvertFrom-Json
 $jsonContent3.resources[0].name = $AvdAzureComputeGalleryName
 $jsonContent3.resources[0].location = $ResourceLocation
+$jsonContent3 | ConvertTo-Json | Set-Content -Path $AvdAzureComputeGalleryParamettersRawUrl
 
 ######################################
 # Creation of the Azure Custom Role #
