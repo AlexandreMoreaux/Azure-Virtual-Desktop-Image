@@ -76,15 +76,15 @@ $jsonContent.AssignableScopes = $jsonContent.AssignableScopes -replace "{subscri
 $jsonContent.Name = $NameoftheAvdImageCustomRole
 $jsonContent | ConvertTo-Json | Set-Content -Path $AvdImageCustomRoleOutputFile
 
-$jsonContent2 = Get-Content -Path $AvdImageUserManagedIdentityParametersgithubRawUrl | ConvertFrom-Json
+$jsonContent2 = Get-Content -Path $AvdImageUserManagedIdentityParametersOutputFile | ConvertFrom-Json
 $jsonContent2.resources[0].name = $UserManagedIdName
 $jsonContent2.resources[0].location = $ResourceLocation
-$jsonContent2 | ConvertTo-Json | Set-Content -Path $AvdImageUserManagedIdentityParametersgithubRawUrl
+$jsonContent2 | ConvertTo-Json | Set-Content -Path $AvdImageUserManagedIdentityParametersOutputFile
 
-$jsonContent3 = Get-Content -Path $AvdAzureComputeGalleryParamettersRawUrl | ConvertFrom-Json
+$jsonContent3 = Get-Content -Path $AvdAzureComputeGalleryParametersOutputFile | ConvertFrom-Json
 $jsonContent3.resources[0].name = $AvdAzureComputeGalleryName
 $jsonContent3.resources[0].location = $ResourceLocation
-$jsonContent3 | ConvertTo-Json | Set-Content -Path $AvdAzureComputeGalleryParamettersRawUrl
+$jsonContent3 | ConvertTo-Json | Set-Content -Path $AvdAzureComputeGalleryParametersOutputFile
 
 ######################################
 # Creation of the Azure Custom Role #
