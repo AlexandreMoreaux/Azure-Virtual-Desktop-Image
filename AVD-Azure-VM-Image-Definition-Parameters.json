@@ -1,0 +1,48 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "uksouth"
+        },
+        "galleryName": {
+            "value": "My_AVD_Azure_Compute_Gallery40"
+        },
+        "imageDefinitionName": {
+            "value": "AVD_Image"
+        },
+        "osType": {
+            "value": "Windows"
+        },
+        "osState": {
+            "value": "Generalized"
+        },
+        "publisher": {
+            "value": "AVD_Image"
+        },
+        "offer": {
+            "value": "AVD_Image"
+        },
+        "sku": {
+            "value": "AVD_Image"
+        },
+        "minRecommendedvCPUs": {
+            "value": 1
+        },
+        "maxRecommendedvCPUs": {
+            "value": 16
+        },
+        "minRecommendedMemory": {
+            "value": 1
+        },
+        "maxRecommendedMemory": {
+            "value": 32
+        },
+        "hyperVGeneration": {
+            "value": "V2"
+        },
+        "architecture": {
+            "value": "x64"
+        }
+    }
+}

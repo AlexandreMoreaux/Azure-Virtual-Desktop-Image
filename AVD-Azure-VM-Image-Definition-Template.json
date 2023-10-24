@@ -1,0 +1,80 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "galleryName": {
+            "type": "string"
+        },
+        "imageDefinitionName": {
+            "type": "string"
+        },
+        "osType": {
+            "type": "string"
+        },
+        "osState": {
+            "type": "string"
+        },
+        "publisher": {
+            "type": "string"
+        },
+        "offer": {
+            "type": "string"
+        },
+        "sku": {
+            "type": "string"
+        },
+        "minRecommendedvCPUs": {
+            "type": "int"
+        },
+        "maxRecommendedvCPUs": {
+            "type": "int"
+        },
+        "minRecommendedMemory": {
+            "type": "int"
+        },
+        "maxRecommendedMemory": {
+            "type": "int"
+        },
+        "hyperVGeneration": {
+            "type": "string"
+        },
+        "architecture": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/galleries/images",
+            "name": "[concat(parameters('galleryName'), '/', parameters('imageDefinitionName'))]",
+            "apiVersion": "2021-10-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "osType": "[parameters('osType')]",
+                "osState": "[parameters('osState')]",
+                "identifier": {
+                    "publisher": "[parameters('publisher')]",
+                    "offer": "[parameters('offer')]",
+                    "sku": "[parameters('sku')]"
+                },
+                "recommended": {
+                    "vCPUs": {
+                        "min": "[parameters('minRecommendedvCPUs')]",
+                        "max": "[parameters('maxRecommendedvCPUs')]"
+                    },
+                    "memory": {
+                        "min": "[parameters('minRecommendedMemory')]",
+                        "max": "[parameters('maxRecommendedMemory')]"
+                    }
+                },
+                "hyperVGeneration": "[parameters('hyperVGeneration')]",
+                "architecture": "[parameters('architecture')]"
+            },
+            "tags": {}
+        }
+    ],
+    "outputs": {}
+}
