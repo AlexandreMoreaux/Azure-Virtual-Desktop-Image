@@ -5,8 +5,14 @@ $AzureSubscriptionName = "MSDN FR 2"
 $ResourceLocation = "westeurope"
 $NameoftheAvdImageCustomRole = "Azure Virtual Desktop Image Custom Role"
 $UserManagedIdName = "MyManagedIdentity"
-$AVDImageResourceGroup = "My_AVD_Images"
+$AVDImageResourceGroupName = "My_AVD_Images"
 $AvdAzureComputeGalleryName = "My_AVD_Azure_Compute_Gallery"
+$AVDImageDefinitionName = "AVD_Image"
+##Not Modify the Variables $AVDImageosType , $AVDImageosState and $AVDImagehyperVGeneration ##
+$AVDImageosType = "Windows"
+$AVDImageosState = "Generalized"
+$AVDImagehyperVGeneration = "V2"
+##Not Modify the Variables $AVDImageosType , $AVDImageosState and $AVDImagehyperVGeneration ##
 
 ########################################################
 # Github repository where the script will be download #
@@ -16,8 +22,8 @@ $AvdImageUserManagedIdentityTemplategithubRawUrl = "https://raw.githubuserconten
 $AvdImageUserManagedIdentityParametersgithubRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Image-User-Managed-identity-Parameters.json"
 $AvdAzureComputeGalleryTemplateRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Azure-Compute-Gallery-Template.json"
 $AvdAzureComputeGalleryParametersRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Azure-Compute-Gallery-Parameters.json"
-$AVDAzureVMImageDefinitionTemplateRawUrl = ""
-$AVDAzureVMImageDefinitionParametersRawUrl = ""
+$AVDAzureVMImageDefinitionTemplateRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Azure-VM-Image-Definition-Template.json"
+$AVDAzureVMImageDefinitionParametersRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Azure-VM-Image-Definition-Parameters.json"
 $AvdImageCustomRoleOutputFile = "C:\AvdImage\AVD-Image-Custom-role.json"
 $AvdImageUserManagedIdentityTemplateOutputFile = "C:\AvdImage\AVD-Image-User-Managed-identity-Template.json"
 $AvdImageUserManagedIdentityParametersOutputFile = "C:\AvdImage\AVD-Image-User-Managed-identity-Parameters.json"
@@ -93,6 +99,15 @@ $jsonContent3.parameters.resourceName.value= $AvdAzureComputeGalleryName
 $jsonContent3.parameters.location.value= $ResourceLocation
 $jsonContent3 | ConvertTo-Json | Set-Content -Path $AvdAzureComputeGalleryParametersOutputFile
 
+$jsonContent4 = Get-Content -Path $AVDAzureVMImageDefinitionParametersOutputFile | ConvertFrom-Json
+$jsonContent4.parameters.location.value= $ResourceLocation
+$jsonContent4.parameters.resourceName.value= $AvdAzureComputeGalleryName
+$jsonContent4.parameters.imageDefinitionName.value= $AVDImageDefinitionName
+$jsonContent4.parameters.osType.value= $AVDImageosType
+$jsonContent4.parameters.osState.value= $AVDImageosState
+$jsonContent4.parameters.hyperVGeneration.value= $AVDImagehyperVGeneration
+$jsonContent4 | ConvertTo-Json -Depth 10 | Set-Content -Path $AVDAzureVMImageDefinitionParametersOutputFile
+
 ######################################
 # Creation of the Azure Custom Role #
 ######################################
@@ -101,8 +116,8 @@ New-AzRoleDefinition -InputFile $AvdImageCustomRoleOutputFile
 ##########################################
 # Creation of the User managed identity #
 ##########################################
-New-AzResourceGroup -Name $AVDImageResourceGroup -Location $ResourceLocation
-New-AzResourceGroupDeployment -ResourceGroupName $AVDImageResourceGroup `
+New-AzResourceGroup -Name $AVDImageResourceGroupName -Location $ResourceLocation
+New-AzResourceGroupDeployment -ResourceGroupName $AVDImageResourceGroupName `
                              -TemplateFile $AvdImageUserManagedIdentityTemplateOutputFile `
                              -TemplateParameterFile $AvdImageUserManagedIdentityParametersOutputFile
 
@@ -110,14 +125,21 @@ New-AzResourceGroupDeployment -ResourceGroupName $AVDImageResourceGroup `
 # Assign the Custom Role the User Managed Id #
 ###############################################
 $AvdImageCustomRole = Get-AzRoleDefinition $NameoftheAvdImageCustomRole
-$userManagedIdentity = Get-AzUserAssignedIdentity -ResourceGroupName $AVDImageResourceGroup -Name $UserManagedIdName
+$userManagedIdentity = Get-AzUserAssignedIdentity -ResourceGroupName $AVDImageResourceGroupName -Name $UserManagedIdName
 $UserManagedIdentityId = $userManagedIdentity.PrincipalId
-$AvdImageCustomRoleScope = "/subscriptions/$SubscriptionId/resourceGroups/$AVDImageResourceGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/$UserManagedIdName"
+$AvdImageCustomRoleScope = "/subscriptions/$SubscriptionId/resourceGroups/$AVDImageResourceGroupName/providers/Microsoft.ManagedIdentity/userAssignedIdentities/$UserManagedIdName"
 New-AzRoleAssignment -ObjectId $UserManagedIdentityId -RoleDefinitionName $AvdImageCustomRole.Name -Scope $AvdImageCustomRoleScope
 
 ##########################################
 # Creation of the Azure Compute Gallery #
 ##########################################
-New-AzResourceGroupDeployment -ResourceGroupName $AVDImageResourceGroup `
+New-AzResourceGroupDeployment -ResourceGroupName $AVDImageResourceGroupName `
                              -TemplateFile $AvdAzureComputeGalleryTemplateOutputFile `
                              -TemplateParameterFile $AvdAzureComputeGalleryParametersOutputFile
+
+##############################################################
+# Creation of the Azure Compute Gallery VM Image Definition #
+##############################################################
+New-AzResourceGroupDeployment -ResourceGroupName $AVDImageResourceGroupName `
+                             -TemplateFile $AVDAzureVMImageDefinitionTemplateOutputFile `
+                             -TemplateParameterFile $AvdImageUserManagedIdentityParametersOutputFile
