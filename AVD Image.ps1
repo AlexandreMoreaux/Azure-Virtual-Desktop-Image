@@ -11,7 +11,7 @@ $AvdAzureComputeGalleryName = "My_AVD_Azure_Compute_Gallery"
 ########################################################
 # Github repository where the script will be download #
 ########################################################
-$AvdImageCustomRolegithubRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Image-Custom-role-Template.json"
+$AvdImageCustomRolegithubRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Image-Custom-role.json"
 $AvdImageUserManagedIdentityTemplategithubRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Image-User-Managed-identity-Template.json"
 $AvdImageUserManagedIdentityParametersgithubRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Image-User-Managed-identity-Parameters.json"
 $AvdAzureComputeGalleryTemplateRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Azure-Compute-Gallery-Template.json"
@@ -82,8 +82,8 @@ $jsonContent2.resources[0].location = $ResourceLocation
 $jsonContent2 | ConvertTo-Json | Set-Content -Path $AvdImageUserManagedIdentityParametersOutputFile
 
 $jsonContent3 = Get-Content -Path $AvdAzureComputeGalleryParametersOutputFile | ConvertFrom-Json
-$jsonContent3.resources[0].name = $AvdAzureComputeGalleryName
-$jsonContent3.resources[0].location = $ResourceLocation
+$jsonContent3.parameters.galleryName.value= $AvdAzureComputeGalleryName
+$jsonContent3.parameters.location.value= $ResourceLocation
 $jsonContent3 | ConvertTo-Json | Set-Content -Path $AvdAzureComputeGalleryParametersOutputFile
 
 ######################################
@@ -95,7 +95,9 @@ New-AzRoleDefinition -InputFile $AvdImageCustomRoleOutputFile
 # Creation of the User managed identity #
 ##########################################
 New-AzResourceGroup -Name $AVDImageResourceGroup -Location $ResourceLocation
-New-AzResourceGroupDeployment -ResourceGroupName $AVDImageResourceGroup -TemplateFile $AvdImageUserManagedIdentityOutputFile
+New-AzResourceGroupDeployment -ResourceGroupName $AVDImageResourceGroup `
+                             -TemplateFile $AvdImageUserManagedIdentityTemplateOutputFile `
+                             -TemplateParameterFile $AvdImageUserManagedIdentityParametersOutputFile
 
 ###############################################
 # Assign the Custom Role the User Managed Id #
@@ -109,4 +111,6 @@ New-AzRoleAssignment -ObjectId $UserManagedIdentityId -RoleDefinitionName $AvdIm
 ##########################################
 # Creation of the Azure Compute Gallery #
 ##########################################
-New-AzResourceGroupDeployment -ResourceGroupName $AVDImageResourceGroup -TemplateFile $AvdAzureComputeGalleryOutputFile
+New-AzResourceGroupDeployment -ResourceGroupName $AVDImageResourceGroup `
+                             -TemplateFile $AvdAzureComputeGalleryTemplateOutputFile `
+                             -TemplateParameterFile $AvdAzureComputeGalleryParametersOutputFile
