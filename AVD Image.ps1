@@ -3,10 +3,10 @@
 ##############
 $AzureSubscriptionName = "MSDN FR 2"
 $ResourceLocation = "westeurope"
-$NameoftheAvdImageCustomRole = "Azure Virtual Desktop Image Custom Role4"
-$UserManagedIdName = "MyManagedIdentity"
+$NameoftheAvdImageCustomRole = "Azure Virtual Desktop Image Custom Role40"
+$UserManagedIdName = "MyManagedIdentity40"
 $AVDImageResourceGroup = "My_AVD_Images"
-$AvdAzureComputeGalleryName = "My_AVD_Azure_Compute_Gallery"
+$AvdAzureComputeGalleryName = "My_AVD_Azure_Compute_Gallery40"
 
 ########################################################
 # Github repository where the script will be download #
@@ -77,12 +77,13 @@ $jsonContent.Name = $NameoftheAvdImageCustomRole
 $jsonContent | ConvertTo-Json | Set-Content -Path $AvdImageCustomRoleOutputFile
 
 $jsonContent2 = Get-Content -Path $AvdImageUserManagedIdentityParametersOutputFile | ConvertFrom-Json
-$jsonContent2.resources[0].name = $UserManagedIdName
-$jsonContent2.resources[0].location = $ResourceLocation
-$jsonContent2 | ConvertTo-Json | Set-Content -Path $AvdImageUserManagedIdentityParametersOutputFile
+$jsonContent2.parameters.name.value = $UserManagedIdName
+$jsonContent2.parameters.location.value = $ResourceLocation
+$jsonContent2.parameters.tagsByResource.value = @{}
+$jsonContent2 | ConvertTo-Json -Depth 10 | Set-Content -Path $AvdImageUserManagedIdentityParametersOutputFile
 
 $jsonContent3 = Get-Content -Path $AvdAzureComputeGalleryParametersOutputFile | ConvertFrom-Json
-$jsonContent3.parameters.galleryName.value= $AvdAzureComputeGalleryName
+$jsonContent3.parameters.resourceName.value= $AvdAzureComputeGalleryName
 $jsonContent3.parameters.location.value= $ResourceLocation
 $jsonContent3 | ConvertTo-Json | Set-Content -Path $AvdAzureComputeGalleryParametersOutputFile
 
