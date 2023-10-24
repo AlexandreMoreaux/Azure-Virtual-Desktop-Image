@@ -3,10 +3,10 @@
 ##############
 $AzureSubscriptionName = "MSDN FR 2"
 $ResourceLocation = "westeurope"
-$NameoftheAvdImageCustomRole = "Azure Virtual Desktop Image Custom Role40"
-$UserManagedIdName = "MyManagedIdentity40"
+$NameoftheAvdImageCustomRole = "Azure Virtual Desktop Image Custom Role"
+$UserManagedIdName = "MyManagedIdentity"
 $AVDImageResourceGroup = "My_AVD_Images"
-$AvdAzureComputeGalleryName = "My_AVD_Azure_Compute_Gallery40"
+$AvdAzureComputeGalleryName = "My_AVD_Azure_Compute_Gallery"
 
 ########################################################
 # Github repository where the script will be download #
@@ -15,12 +15,16 @@ $AvdImageCustomRolegithubRawUrl = "https://raw.githubusercontent.com/AlexandreMo
 $AvdImageUserManagedIdentityTemplategithubRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Image-User-Managed-identity-Template.json"
 $AvdImageUserManagedIdentityParametersgithubRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Image-User-Managed-identity-Parameters.json"
 $AvdAzureComputeGalleryTemplateRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Azure-Compute-Gallery-Template.json"
-$AvdAzureComputeGalleryParamettersRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Azure-Compute-Gallery-Parameters.json"
+$AvdAzureComputeGalleryParametersRawUrl = "https://raw.githubusercontent.com/AlexandreMoreaux/Azure-Virtual-Desktop-Image/main/AVD-Azure-Compute-Gallery-Parameters.json"
+$AVDAzureVMImageDefinitionTemplateRawUrl = ""
+$AVDAzureVMImageDefinitionParametersRawUrl = ""
 $AvdImageCustomRoleOutputFile = "C:\AvdImage\AVD-Image-Custom-role.json"
 $AvdImageUserManagedIdentityTemplateOutputFile = "C:\AvdImage\AVD-Image-User-Managed-identity-Template.json"
 $AvdImageUserManagedIdentityParametersOutputFile = "C:\AvdImage\AVD-Image-User-Managed-identity-Parameters.json"
 $AvdAzureComputeGalleryTemplateOutputFile = "C:\AvdImage\AVD-Azure-Compute-Gallery-Template.json"
 $AvdAzureComputeGalleryParametersOutputFile = "C:\AvdImage\AVD-Azure-Compute-Gallery-Parameters.json"
+$AVDAzureVMImageDefinitionTemplateOutputFile = "C:\AvdImage\AVD-Azure-VM-Image-Definition-Template"
+$AVDAzureVMImageDefinitionParametersOutputFile = "C:\AvdImage\AVD-Azure-VM-Image-Definition-Parameters"
 
 ##########################
 # Create Temp Directory #
@@ -42,7 +46,9 @@ Invoke-WebRequest -Uri $AvdImageCustomRolegithubRawUrl -OutFile $AvdImageCustomR
 Invoke-WebRequest -Uri $AvdImageUserManagedIdentityTemplategithubRawUrl -OutFile $AvdImageUserManagedIdentityTemplateOutputFile
 Invoke-WebRequest -Uri $AvdImageUserManagedIdentityParametersgithubRawUrl -OutFile $AvdImageUserManagedIdentityParametersOutputFile
 Invoke-WebRequest -Uri $AvdAzureComputeGalleryTemplateRawUrl -OutFile $AvdAzureComputeGalleryTemplateOutputFile
-Invoke-WebRequest -Uri $AvdAzureComputeGalleryParamettersRawUrl -OutFile $AvdAzureComputeGalleryParametersOutputFile
+Invoke-WebRequest -Uri $AvdAzureComputeGalleryParametersRawUrl -OutFile $AvdAzureComputeGalleryParametersOutputFile
+Invoke-WebRequest -Uri $AVDAzureVMImageDefinitionTemplateRawUrl -OutFile $AVDAzureVMImageDefinitionTemplateOutputFile
+Invoke-WebRequest -Uri $AVDAzureVMImageDefinitionParametersRawUrl -OutFile $AVDAzureVMImageDefinitionParametersOutputFile
 
 ##################################
 # Connect to Azure and Azure AD #
