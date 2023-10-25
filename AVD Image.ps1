@@ -113,10 +113,14 @@ $jsonContent4 | ConvertTo-Json -Depth 10 | Set-Content -Path $AVDAzureVMImageDef
 ######################################
 New-AzRoleDefinition -InputFile $AvdImageCustomRoleOutputFile
 
+###################################
+# Creation of the Resource Group #
+###################################
+New-AzResourceGroup -Name $AVDImageResourceGroupName -Location $ResourceLocation
+
 ##########################################
 # Creation of the User managed identity #
 ##########################################
-New-AzResourceGroup -Name $AVDImageResourceGroupName -Location $ResourceLocation
 New-AzResourceGroupDeployment -ResourceGroupName $AVDImageResourceGroupName `
                              -TemplateFile $AvdImageUserManagedIdentityTemplateOutputFile `
                              -TemplateParameterFile $AvdImageUserManagedIdentityParametersOutputFile
