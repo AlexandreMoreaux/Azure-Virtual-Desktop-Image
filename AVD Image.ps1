@@ -1,7 +1,7 @@
 ##############
 # Variables #
 ##############
-$AzureSubscriptionName = "MSDN FR 2"
+$AzureSubscriptionName = ""
 $ResourceLocation = "westeurope"
 $NameoftheAvdImageCustomRole = "Azure Virtual Desktop Image Custom Role"
 $UserManagedIdName = "MyManagedIdentity"
@@ -29,8 +29,8 @@ $AvdImageUserManagedIdentityTemplateOutputFile = "C:\AvdImage\AVD-Image-User-Man
 $AvdImageUserManagedIdentityParametersOutputFile = "C:\AvdImage\AVD-Image-User-Managed-identity-Parameters.json"
 $AvdAzureComputeGalleryTemplateOutputFile = "C:\AvdImage\AVD-Azure-Compute-Gallery-Template.json"
 $AvdAzureComputeGalleryParametersOutputFile = "C:\AvdImage\AVD-Azure-Compute-Gallery-Parameters.json"
-$AVDAzureVMImageDefinitionTemplateOutputFile = "C:\AvdImage\AVD-Azure-VM-Image-Definition-Template"
-$AVDAzureVMImageDefinitionParametersOutputFile = "C:\AvdImage\AVD-Azure-VM-Image-Definition-Parameters"
+$AVDAzureVMImageDefinitionTemplateOutputFile = "C:\AvdImage\AVD-Azure-VM-Image-Definition-Template.json"
+$AVDAzureVMImageDefinitionParametersOutputFile = "C:\AvdImage\AVD-Azure-VM-Image-Definition-Parameters.json"
 
 ##########################
 # Create Temp Directory #
@@ -101,7 +101,7 @@ $jsonContent3 | ConvertTo-Json | Set-Content -Path $AvdAzureComputeGalleryParame
 
 $jsonContent4 = Get-Content -Path $AVDAzureVMImageDefinitionParametersOutputFile | ConvertFrom-Json
 $jsonContent4.parameters.location.value= $ResourceLocation
-$jsonContent4.parameters.resourceName.value= $AvdAzureComputeGalleryName
+$jsonContent4.parameters.galleryName.value= $AvdAzureComputeGalleryName
 $jsonContent4.parameters.imageDefinitionName.value= $AVDImageDefinitionName
 $jsonContent4.parameters.osType.value= $AVDImageosType
 $jsonContent4.parameters.osState.value= $AVDImageosState
@@ -142,4 +142,4 @@ New-AzResourceGroupDeployment -ResourceGroupName $AVDImageResourceGroupName `
 ##############################################################
 New-AzResourceGroupDeployment -ResourceGroupName $AVDImageResourceGroupName `
                              -TemplateFile $AVDAzureVMImageDefinitionTemplateOutputFile `
-                             -TemplateParameterFile $AvdImageUserManagedIdentityParametersOutputFile
+                             -TemplateParameterFile $AVDAzureVMImageDefinitionParametersOutputFile
